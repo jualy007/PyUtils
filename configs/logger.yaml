@@ -1,0 +1,52 @@
+version: 1
+disable_existing_loggers: False
+formatters:
+  simple:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    datefmt: '%Y-%m-%d %H:%M:%S'
+  standard:
+    format: '%(asctime)s %(levelname)-7s %(name)-25s %(message)s'
+  advanced:
+    format: '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+  app:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: standard
+    filename: gentelella.log
+    mode: a
+    maxBytes: 10485760
+    backupCount: 5
+  info_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: INFO
+    formatter: simple
+    filename: info.log
+    maxBytes: 10485760
+    backupCount: 20
+    encoding: utf8
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: simple
+    filename: errors.log
+    maxBytes: 10485760
+    backupCount: 20
+    encoding: utf8
+loggers:
+  '':
+    level: INFO
+    handlers: ['info_file_handler', 'error_file_handler']
+    propagate: True
+  'app':
+    level: WARNING
+    handlers: ['console', 'app']
+    propagate: True
+root:
+  level: INFO
+  handlers: [console, info_file_handler, error_file_handler]
